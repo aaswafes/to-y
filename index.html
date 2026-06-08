@@ -360,9 +360,51 @@
   .cd-box{ min-width:clamp(52px,15.5vw,76px); padding:clamp(10px,2.4vw,16px) clamp(4px,1.6vw,10px); border:1px solid var(--line); border-radius:4px; background:linear-gradient(160deg, rgba(231,201,124,.10), rgba(231,201,124,.02)); box-shadow:0 6px 20px -12px rgba(0,0,0,.6); }
   .cd-num{ display:block; font-family:'Marcellus',serif; font-size:clamp(24px,7vw,40px); line-height:1; }
   .cd-label{ display:block; margin-top:6px; font-family:'Jost',sans-serif; font-size:clamp(8px,2.1vw,10px); letter-spacing:.16em; text-transform:uppercase; color:var(--gold-soft); opacity:.8; }
+  /* ---------- opening cover ---------- */
+  body.cover-locked{ overflow:hidden; }
+  #cover{ position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; padding:clamp(20px,6vw,48px); text-align:center;
+    background: radial-gradient(120% 80% at 50% -10%, #56182230 0%, transparent 55%), linear-gradient(170deg,#4a141d 0%,#2a0d12 55%,#200a0e 100%);
+    transition:transform 1s cubic-bezier(.7,0,.25,1), opacity .9s ease; will-change:transform,opacity; }
+  #cover.open{ transform:translateY(-104%); opacity:0; pointer-events:none; }
+  .cover-inner{ max-width:520px; }
+  .cover-eyebrow{ font-family:'Jost',sans-serif; letter-spacing:.42em; text-transform:uppercase; font-size:clamp(10px,2.6vw,12px); color:var(--gold-soft); margin-bottom:clamp(16px,4vw,24px); padding-left:.42em; }
+  .cover-env{ width:clamp(150px,42vw,210px); margin:0 auto clamp(16px,4vw,24px); color:var(--gold); animation:cfloat 4.5s ease-in-out infinite; }
+  .cover-env svg{ width:100%; display:block; filter:drop-shadow(0 12px 28px rgba(0,0,0,.55)); }
+  @keyframes cfloat{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .cover-names{ font-family:'Marcellus',serif; font-size:clamp(34px,10vw,62px); letter-spacing:.03em; line-height:1.05; margin-bottom:clamp(6px,2vw,10px); }
+  .cover-sub{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(15px,4vw,20px); color:var(--cream); opacity:.9; margin-bottom:clamp(22px,5vw,30px); }
+  .cover-btn{ font-family:'Jost',sans-serif; letter-spacing:.16em; text-transform:uppercase; font-size:clamp(11px,3vw,13px); color:#2a0d12; cursor:pointer; border:none;
+    background:linear-gradient(135deg,var(--gold-bright),var(--gold),var(--gold-deep)); padding:clamp(14px,3.6vw,17px) clamp(26px,7vw,40px); border-radius:999px;
+    box-shadow:0 10px 30px -10px rgba(231,201,124,.6), 0 0 0 1px rgba(255,255,255,.18) inset; transition:transform .3s ease, box-shadow .3s ease; display:inline-flex; align-items:center; gap:10px; }
+  .cover-btn:hover{ transform:translateY(-2px); box-shadow:0 16px 40px -10px rgba(231,201,124,.75), 0 0 0 1px rgba(255,255,255,.3) inset; }
+  .cover-btn svg{ width:15px; height:15px; }
+  @media (prefers-reduced-motion: reduce){ .cover-env{animation:none} #cover{transition:opacity .4s ease} }
 </style>
 </head>
 <body>
+
+  <!-- opening cover (tap to open) -->
+  <div id="cover" role="dialog" aria-label="Taklifnomani ochish">
+    <div class="cover-inner">
+      <p class="cover-eyebrow">To'y taklifnomasi</p>
+      <div class="cover-env" aria-hidden="true">
+        <svg viewBox="0 0 200 150" fill="none">
+          <rect x="14" y="34" width="172" height="100" rx="6" fill="#3a1018" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M14 40 L100 100 L186 40" stroke="currentColor" stroke-width="1.6" fill="none"/>
+          <path d="M14 132 L74 88 M186 132 L126 88" stroke="currentColor" stroke-width="1" opacity=".5"/>
+          <circle cx="100" cy="74" r="22" fill="#2a0d12" stroke="currentColor" stroke-width="1.6"/>
+          <text x="100" y="81" text-anchor="middle" font-family="Marcellus, serif" font-size="18" fill="currentColor">A &amp; A</text>
+          <path d="M70 22 q30 -14 60 0" stroke="currentColor" stroke-width="1" opacity=".5" fill="none"/>
+        </svg>
+      </div>
+      <h1 class="cover-names gold-text">Ahrorbek &amp; Asal</h1>
+      <p class="cover-sub">Sizni nikoh to'yimizga taklif etamiz</p>
+      <button class="cover-btn" id="openBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"/></svg>
+        Taklifnomani ochish
+      </button>
+    </div>
+  </div>
 
   <!-- floating gold sparkles -->
   <div class="ambient" id="ambient" aria-hidden="true"></div>
@@ -611,6 +653,21 @@
     s.textContent=p(sec%60);
   }
   tick(); setInterval(tick,1000);
+})();
+</script>
+<script>
+(function(){
+  var body=document.body, cover=document.getElementById('cover'), btn=document.getElementById('openBtn');
+  if(!cover) return;
+  body.classList.add('cover-locked');
+  function open(){
+    cover.classList.add('open');
+    body.classList.remove('cover-locked');
+    try{ window.scrollTo(0,0); }catch(e){}
+    setTimeout(function(){ cover.style.display='none'; }, 1100);
+  }
+  if(btn) btn.addEventListener('click', open);
+  cover.addEventListener('click', function(e){ if(e.target===cover) open(); });
 })();
 </script>
 </body>
