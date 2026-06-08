@@ -484,6 +484,16 @@
         <!-- details -->
         <div class="details">
           <div class="detail reveal">
+            <div class="label">Sana</div>
+            <div class="value gold-text">25 iyun 2026</div>
+            <div class="value" style="font-size:clamp(15px,4vw,18px);font-weight:500;margin-top:4px;">
+              <small>Payshanba</small>
+            </div>
+            <div class="detail-orn" aria-hidden="true">
+              <svg viewBox="0 0 22 8"><path d="M1 4 H8 M14 4 H21" stroke="currentColor" stroke-width="1"/><circle cx="11" cy="4" r="2" fill="currentColor"/></svg>
+            </div>
+          </div>
+          <div class="detail reveal">
             <div class="label">Vaqti</div>
             <div class="value gold-text">Soat 19:00</div>
             <div class="detail-orn" aria-hidden="true">
@@ -585,7 +595,7 @@
   /* ===== TO'Y SANASI shu yerda belgilanadi: new Date(yil, oy[0=yan..11=dek], kun, soat, daqiqa) =====
      Masalan 15-avgust 2026, 19:00 uchun:  var WEDDING = new Date(2026, 7, 15, 19, 0, 0);
      Hozircha sana berilmagani uchun sanoq 00 da turadi. */
-  var WEDDING = null;
+  var WEDDING = new Date(2026, 5, 25, 19, 0, 0);
   var d=document.getElementById('cd-days'),h=document.getElementById('cd-hours'),
       m=document.getElementById('cd-mins'),s=document.getElementById('cd-secs');
   function p(n){return (n<10?'0':'')+n;}
